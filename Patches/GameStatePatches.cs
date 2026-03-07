@@ -1,4 +1,5 @@
-﻿using HarmonyLib;
+﻿#nullable disable
+using HarmonyLib;
 using Il2Cpp;
 using Il2CppTLD.IntBackedUnit;
 using MelonLoader;

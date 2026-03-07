@@ -1,4 +1,5 @@
-﻿using HarmonyLib;
+﻿#nullable disable
+using HarmonyLib;
 using UnityEngine;
 using Il2Cpp;
 

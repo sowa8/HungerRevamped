@@ -1,6 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<!--This is an xml comment. Comments have no impact on compiling.-->
 
+ <PropertyGroup>
+        <!--This needs to be changed for the mod to compile.-->
+        <TheLongDarkPath>D:\SteamLibrary\steamapps\common\TheLongDark</TheLongDarkPath>
+        <Platforms>AnyCPU;x64</Platforms>
+    </PropertyGroup>
+	
 	<PropertyGroup>
 		<!--This is the .NET version the mod will be compiled with. Don't change it.-->
 		<TargetFramework>net6.0</TargetFramework>
@@ -24,9 +30,7 @@
 		<DebugType>embedded</DebugType>
 	</PropertyGroup>
 
-    <PropertyGroup>
-        <!--This needs to be changed for the mod to compile.-->
-        <TheLongDarkPath>..\..\</TheLongDarkPath>
+   <PropertyGroup>
         <MelonLoaderPath>$(TheLongDarkPath)/MelonLoader/net6</MelonLoaderPath>
         <ManagedPath>$(TheLongDarkPath)/MelonLoader/Managed</ManagedPath>
         <Il2CppPath>$(TheLongDarkPath)/MelonLoader/Il2CppAssemblies</Il2CppPath>
@@ -40,6 +44,16 @@
 	<!--This is the of packages that the mod references.-->
 	<ItemGroup>
 		<!--This package contains almost everything a person could possibly need to reference while modding.-->
+		 <Reference Include="Il2CppAK.Wwise.Unity.API.WwiseTypes">
+		   <HintPath>D:\SteamLibrary\steamapps\common\TheLongDark\MelonLoader\Il2CppAssemblies\Il2CppAK.Wwise.Unity.API.WwiseTypes.dll</HintPath>
+		 </Reference>
+		 <Reference Include="ModData">
+          <HintPath>D:\SteamLibrary\steamapps\common\TheLongDark\Mods\ModData.dll</HintPath>
+        </Reference>
+        <Reference Include="ModSettings">
+          <HintPath>D:\SteamLibrary\steamapps\common\TheLongDark\Mods\ModSettings.dll</HintPath>
+        </Reference>
+		
         <Reference Include="Il2CppInterop.Common">
           <HintPath>..\..\MelonLoader\net6\Il2CppInterop.Common.dll</HintPath>
         </Reference>
@@ -74,7 +88,10 @@
         <Reference Include="Il2CppTLD.Trial" />
         <Reference Include="Il2CppTLD.UserGeneratedContent" />
         <Reference Include="Il2CppTLD.IntBackedUnit" />
-        <Reference Include="ModSettings"/>
+        <Reference Include="ModSettings" />
+        <Reference Include="Unity.Addressables">
+          <HintPath>D:\SteamLibrary\steamapps\common\TheLongDark\MelonLoader\Il2CppAssemblies\Unity.Addressables.dll</HintPath>
+        </Reference>
         <Reference Include="Unity.Mathematics" />
         <Reference Include="Unity.TextMeshPro" />
         <Reference Include="UnityEngine.AssetBundleModule" />
@@ -91,7 +108,7 @@
 		<!--If the mod references any other mods (such as ModSettings), that NuGet package will also need to be listed here.-->
 	</ItemGroup>
 	<ItemGroup>
-	  <Folder Include="Utils\" />
+	  <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
 	</ItemGroup>
     <Target Name="PostBuild" AfterTargets="PostBuildEvent">
         <Exec Command="xcopy /y /d  &quot;$(TargetPath)&quot; &quot;$(TheLongDarkPath)\Mods&quot;" />

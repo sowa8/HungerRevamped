@@ -1,4 +1,6 @@
-﻿using ModData;
+﻿#nullable disable
+#nullable disable
+using ModData;
 
 namespace HungerRevamped
 {
@@ -12,9 +14,9 @@ namespace HungerRevamped
             return dm.Save(data, null);
         }
 
-        public string? LoadData()
+        public string LoadData()
         {
-            string? data = dm.Load(null);
+            string data = dm.Load(null);
             return data;
         }
 

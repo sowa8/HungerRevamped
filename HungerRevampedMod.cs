@@ -1,4 +1,5 @@
-﻿using MelonLoader;
+﻿#nullable disable
+using MelonLoader;
 using UnityEngine;
 
 namespace HungerRevamped {
@@ -12,6 +13,7 @@ namespace HungerRevamped {
             MenuSettings.Initialize();
             Debug.Log($"[{Info.Name}] version {Info.Version} loaded");
             new MelonLoader.MelonLogger.Instance($"{Info.Name}").Msg($"Version {Info.Version} loaded");
+            DebugHelper.Init();
         }
     }
 }

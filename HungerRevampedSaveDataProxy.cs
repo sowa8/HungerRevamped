@@ -1,4 +1,5 @@
-﻿namespace HungerRevamped {
+﻿#nullable disable
+namespace HungerRevamped {
 
 	internal class HungerRevampedSaveDataProxy {
 

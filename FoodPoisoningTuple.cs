@@ -1,4 +1,5 @@
-﻿namespace HungerRevamped {
+﻿#nullable disable
+namespace HungerRevamped {
 
 	public class DeferredFoodPoisoning {
 		public float start;

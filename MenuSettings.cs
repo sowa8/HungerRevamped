@@ -1,4 +1,5 @@
-﻿using ModSettings;
+﻿#nullable disable
+using ModSettings;
 
 namespace HungerRevamped {
 	internal class MenuSettings : JsonModSettings {

@@ -1,34 +1,174 @@
-﻿using HarmonyLib;
-using UnityEngine;
+﻿#nullable disable
+using HarmonyLib;
 using Il2Cpp;
+using Il2CppTLD.Gear;
+using System;
+using System.Linq;
+using UnityEngine;
 
-namespace HungerRevamped {
-	internal static class HarvestFoodForCanPatch {
+namespace HungerRevamped
+{
+    internal static class CannedFoodHarvestUI
+    {
+        private static GameObject harvestButton;
+        private static GearItem currentShownGear;
 
-		/*
-		 * Allow harvesting the cans of canned food items. The idea is that while
-		 * the food inside the can may be ruined, the can itself should still be usable.
-		 */
+        // ================= PATCH =================
 
-		[HarmonyPatch(typeof(FoodItem), nameof(FoodItem.Awake))]
-		private static class AllowBreakingDownFoodForContainer {
-			private static void Postfix(FoodItem __instance) {
-				GameObject item = __instance.gameObject;
-				if (item.GetComponent<Harvest>()) return; // Item can already be broken down
-				if (!__instance.m_GearPrefabHarvestAfterFinishEatingNormal) return; // Not an item-rewarding food item
+        [HarmonyPatch(typeof(ItemDescriptionPage), nameof(ItemDescriptionPage.UpdateGearItemDescription))]
+        internal class ItemDescriptionPatch
+        {
+            private static void Postfix(ItemDescriptionPage __instance, GearItem gi)
+            {
+                InitializeButton(__instance);
+                TrySetGear(gi);
+            }
+        }
 
-				GearItem resultItem = __instance.m_GearPrefabHarvestAfterFinishEatingNormal.GetComponent<GearItem>();
+        // ================= BUTTON INIT =================
 
-				Harvest harvest = item.AddComponent<Harvest>();
-				harvest.m_YieldGear = new GearItem[] { resultItem };
-				harvest.m_YieldGearUnits = new int[] { 1 };
-				harvest.m_DurationMinutes = 5;
-				harvest.m_Audio = "Play_OpenCan";
+        private static void InitializeButton(ItemDescriptionPage page)
+        {
+            if (page == null)
+                return;
 
-				// Retroactively cache Harvest in GearItem
-				GearItem baseGear = __instance.GetComponent<GearItem>();
-				baseGear.m_Harvest = harvest;
-			}
-		}
-	}
+            if (harvestButton != null)
+                return;
+
+            GameObject equipButton = page.m_MouseButtonEquip;
+            if (equipButton == null)
+                return;
+
+            harvestButton = UnityEngine.Object.Instantiate(
+                equipButton,
+                equipButton.transform.parent,
+                true);
+
+            harvestButton.transform.Translate(0f, -0.12f, 0f);
+
+            UILabel label = Utils.GetComponentInChildren<UILabel>(harvestButton);
+            if (label != null)
+                label.text = "Harvest Can";
+
+            UIButton uiBtn = harvestButton.GetComponent<UIButton>();
+            if (uiBtn != null)
+                uiBtn.isEnabled = true;
+
+            AddAction(harvestButton, new Action(OnHarvestPressed));
+            SetActive(false);
+        }
+
+        private static void AddAction(GameObject button, Action action)
+        {
+            Il2CppSystem.Collections.Generic.List<EventDelegate> list =
+                new Il2CppSystem.Collections.Generic.List<EventDelegate>();
+
+            list.Add(new EventDelegate(action));
+
+            UIButton uiBtn = Utils.GetComponentInChildren<UIButton>(button);
+            if (uiBtn != null)
+                uiBtn.onClick = list;
+        }
+
+        // ================= GEAR CHECK =================
+
+        private static void TrySetGear(GearItem gear)
+        {
+            currentShownGear = gear;
+
+            bool isCannedFood = false;
+
+            if (gear != null)
+            {
+                FoodItem food = gear.GetComponent<FoodItem>();
+
+                if (food != null &&
+                    food.m_GearPrefabHarvestAfterFinishEatingNormal != null)
+                {
+                    isCannedFood = true;
+                }
+            }
+
+            SetActive(isCannedFood);
+        }
+
+        private static void SetActive(bool active)
+        {
+            if (harvestButton == null)
+                return;
+
+            NGUITools.SetActive(harvestButton, active);
+
+            UIButton uiBtn = harvestButton.GetComponent<UIButton>();
+            if (uiBtn != null)
+                uiBtn.isEnabled = active;
+        }
+
+        // ================= HARVEST =================
+
+        private static void OnHarvestPressed()
+        {
+            GearItem gear = currentShownGear;
+
+            if (gear == null)
+            {
+                HUDMessage.AddMessage("No item selected.");
+                return;
+            }
+
+            InterfaceManager.GetPanel<Panel_GenericProgressBar>().Launch(
+                "Harvesting Can...",
+                5f,
+                0f,
+                0f,
+                "Play_OpenCan",
+                null,
+                false,
+                true,
+                new Action<bool, bool, float>(OnHarvestFinished)
+            );
+        }
+
+        private static void OnHarvestFinished(bool success, bool playerCancel, float progress)
+        {
+            if (!success || playerCancel)
+            {
+                HUDMessage.AddMessage("Harvest cancelled.");
+                return;
+            }
+
+            PlayerManager pm = GameManager.GetPlayerManagerComponent();
+            if (pm == null)
+                return;
+
+            // Spawn RecycledCan
+            SpawnGear(pm, "RecycledCan", 1);
+
+            // Remove eaten food
+            if (currentShownGear != null)
+            {
+                GameManager.GetInventoryComponent()
+                    .DestroyGear(currentShownGear);
+            }
+        }
+
+        private static void SpawnGear(PlayerManager pm, string nameFragment, int count)
+        {
+            GearItemData[] all =
+                Resources.FindObjectsOfTypeAll<GearItemData>();
+
+            GearItemData found =
+                all.FirstOrDefault(g =>
+                    g != null &&
+                    g.name.IndexOf(nameFragment,
+                        StringComparison.OrdinalIgnoreCase) >= 0);
+
+            if (found == null)
+                return;
+
+            pm.InstantiateItemInPlayerInventory(
+                found.PrefabReference,
+                count);
+        }
+    }
 }

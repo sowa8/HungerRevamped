@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿#nullable disable
+using UnityEngine;
 
 namespace HungerRevamped {
 	internal static class Tuning {
