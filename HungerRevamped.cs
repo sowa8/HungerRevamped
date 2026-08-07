@@ -7,7 +7,7 @@ using Il2Cpp;
 namespace HungerRevamped {
 	public class HungerRevamped {
 
-		private static HungerRevamped instance = null;
+        /*private static HungerRevamped instance = null;
 		internal static HungerRevamped Instance {
 			get {
 				if (instance == null)
@@ -17,9 +17,35 @@ namespace HungerRevamped {
 			set {
 				instance = value;
 			}
-		}
+		}*/
+        private static HungerRevamped instance = null;
 
-		internal readonly Hunger hunger;
+        internal static HungerRevamped Instance
+        {
+            get
+            {
+                if (instance == null)
+                    throw new NullReferenceException("HungerRevamped instance was null - accessed before Hunger#Start was called.");
+                return instance;
+            }
+            set
+            {
+                instance = value;
+            }
+        }
+
+        internal static bool HasInstance
+        {
+            get
+            {
+                return instance != null;
+            }
+        }
+
+
+
+
+        internal readonly Hunger hunger;
 		internal readonly List<DeferredFoodPoisoning> deferredFoodPoisonings;
 
 		internal double storedCalories;

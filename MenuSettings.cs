@@ -31,7 +31,16 @@ namespace HungerRevamped {
 		[Description("Rather than increasing the condition by 50%, the condition of the food item being cooked is doubled.")]
 		public bool cookingDoublesCondition = true;
 
-		internal static MenuSettings settings;
+        [Name("Print vitamin C after eating")]
+        [Description("Prints the current vitamin C level after eating to the melon log.")]
+        public bool PrintVitaminC = false;
+
+        [Name("Maximum Carry Bonus")]
+        [Description("Maximum carry capacity bonus in kilograms.")]
+        [Slider(0, 15)]
+        public int MaxCarryBonus = 5;
+
+        internal static MenuSettings settings;
 
 		internal static void Initialize() {
 			settings = new MenuSettings();

@@ -13,10 +13,12 @@ namespace HungerRevamped {
 		private static class HungerStart {
 			private static void Prefix(Hunger __instance)
 			{
-				if (__instance.m_StartHasBeenCalled)
-					return;
+                /*if (__instance.m_StartHasBeenCalled)
+					return;*/
+                if (HungerRevamped.HasInstance)
+                    return;
 
-				float burnRateScale = GameManager.GetExperienceModeManagerComponent().GetCalorieBurnScale();
+                float burnRateScale = GameManager.GetExperienceModeManagerComponent().GetCalorieBurnScale();
 				__instance.m_MaxReserveCalories = Tuning.maximumHungerCalories * burnRateScale;
 				__instance.m_StarvingCalorieThreshold = Tuning.hungerLevelStarving * __instance.m_MaxReserveCalories;
 
@@ -27,10 +29,12 @@ namespace HungerRevamped {
 		[HarmonyPatch(typeof(Condition), "Start")]
 		private static class ConditionStart {
 			private static void Prefix(Condition __instance) {
-				if (__instance.m_StartHasBeenCalled)
-					return;
+                /*if (__instance.m_StartHasBeenCalled)
+					return;*/
+                if (HungerRevamped.HasInstance)
+                    return;
 
-				__instance.m_HPDecreasePerDayFromStarving = 0f;
+                __instance.m_HPDecreasePerDayFromStarving = 0f;
 			}
 		}
 

@@ -8,7 +8,7 @@ namespace HungerRevamped {
 		internal const double startingStoredCalories = 12_000;
 		internal const double defaultStoredCalories = 10_000;
 
-		internal const float hungerLevelWellFed = 0.6f;
+		internal const float hungerLevelWellFed = 0.8f; //was 0.6 before 2.2.0.
 		internal const float hungerLevelMalnourished = 0.35f;
 		internal const float hungerLevelStarvingWarning = 0.25f;
 		internal const float hungerLevelStarving = 0.2f;
@@ -21,8 +21,9 @@ namespace HungerRevamped {
 		internal const float foodPoisoningDelayHoursMax = 16f;
 		internal const float foodPoisoningPreventedByAntibioticsChance = 90f;
 
-		internal const float wellFedCarryCapacityBuffMax = 7.5f;
-		internal const float wellFedCarryBonusStart = 2.5f;
+        //internal const float wellFedCarryCapacityBuffMax = 7.5f; - hardcoded old
+        internal static int WellFedCarryCapacityBuffMax =>MenuSettings.settings.MaxCarryBonus;
+        internal const float wellFedCarryBonusStart = 2.5f;
 		internal const float wellFedCarryBonusEnd = 2f;
 
 		internal const double startingWellFedHungerScore = -1;
@@ -79,7 +80,7 @@ namespace HungerRevamped {
 		internal static float GetCarryBonus(float hungerScore /* [-1, 1] */, float storedCaloriesScore /* [-1, 1] */) {
 			float totalScore = storedCaloriesScore + hungerScore; /* [-2, 2] */
 			float totalScore01 = Mathf.Clamp01(totalScore);
-			return totalScore01 * wellFedCarryCapacityBuffMax;
+			return totalScore01 * WellFedCarryCapacityBuffMax;
 		}
 
 		private static float LerpFromArray(float[,] array, float x) {
