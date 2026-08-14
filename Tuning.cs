@@ -8,8 +8,9 @@ namespace HungerRevamped {
 		internal const double startingStoredCalories = 12_000;
 		internal const double defaultStoredCalories = 10_000;
 
-		internal const float hungerLevelWellFed = 0.8f; //was 0.6 before 2.2.0.
-		internal const float hungerLevelMalnourished = 0.35f;
+		internal const float hungerLevelWellFed = 0.8f; // was 0.6 before 2.2.0
+        internal const float hungerLevelPeckish = 0.6f; // 2.2.0
+        internal const float hungerLevelMalnourished = 0.35f;
 		internal const float hungerLevelStarvingWarning = 0.25f;
 		internal const float hungerLevelStarving = 0.2f;
 

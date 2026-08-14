@@ -9,12 +9,12 @@ namespace HungerRevamped {
 
 		internal static bool IsApplyingDeferredFoodPoisoning = false;
 
-		[HarmonyPatch(typeof(Hunger), nameof(Hunger.Start))]
+        /*[HarmonyPatch(typeof(Hunger), nameof(Hunger.Start))]
 		private static class HungerStart {
 			private static void Prefix(Hunger __instance)
 			{
-                /*if (__instance.m_StartHasBeenCalled)
-					return;*/
+                //if (__instance.m_StartHasBeenCalled)
+					//return;
                 if (HungerRevamped.HasInstance)
                     return;
 
@@ -24,9 +24,29 @@ namespace HungerRevamped {
 
 				HungerRevamped.Instance = new HungerRevamped(__instance);
 			}
-		}
+		}*/
 
-		[HarmonyPatch(typeof(Condition), "Start")]
+        [HarmonyPatch(typeof(Hunger), nameof(Hunger.Start))]
+        private static class HungerStart
+        {
+            private static void Prefix(Hunger __instance)
+            {
+                float burnRateScale = GameManager.GetExperienceModeManagerComponent().GetCalorieBurnScale();
+
+                __instance.m_MaxReserveCalories =
+                    Tuning.maximumHungerCalories * burnRateScale;
+
+                __instance.m_StarvingCalorieThreshold =
+                    Tuning.hungerLevelStarving * __instance.m_MaxReserveCalories;
+
+                if (__instance.m_StartHasBeenCalled)
+                    return;
+
+                HungerRevamped.Instance = new HungerRevamped(__instance);
+            }
+        }
+
+        [HarmonyPatch(typeof(Condition), "Start")]
 		private static class ConditionStart {
 			private static void Prefix(Condition __instance) {
                 /*if (__instance.m_StartHasBeenCalled)

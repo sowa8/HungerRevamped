@@ -1,8 +1,9 @@
 ﻿#nullable disable
-using System;
 using HarmonyLib;
-using UnityEngine;
 using Il2Cpp;
+using MelonLoader;
+using System;
+using UnityEngine;
 
 namespace HungerRevamped {
 
@@ -46,7 +47,7 @@ namespace HungerRevamped {
 		[HarmonyPatch(typeof(Panel_FirstAid), "RefreshStatusLabels")]
 		private static class UpdateCalorieStoreDisplay {
 
-			private static readonly float[] HUNGER_LEVELS = { Tuning.hungerLevelStarving, Tuning.hungerLevelMalnourished, Tuning.hungerLevelWellFed, 0.8f };
+			private static readonly float[] HUNGER_LEVELS = { Tuning.hungerLevelStarving, Tuning.hungerLevelMalnourished, Tuning.hungerLevelPeckish, 0.8f };
 
 			private static void Postfix(Panel_FirstAid __instance) {
 				Color red = __instance.m_PoorHealthStatusColor;
@@ -60,7 +61,7 @@ namespace HungerRevamped {
 				// Set status labels to red when below starving hunger ratio
 				Hunger hunger = HungerRevamped.Instance.hunger;
 				float hungerRatio = Mathf.Clamp01(hunger.m_CurrentReserveCalories / hunger.m_MaxReserveCalories);
-				__instance.m_HungerPercentLabel.color = (hungerRatio < Tuning.hungerLevelStarving) ? red : Color.white;
+                __instance.m_HungerPercentLabel.color = (hungerRatio < Tuning.hungerLevelStarving) ? red : Color.white;
 				__instance.m_HungerStatusLabel.color = (hungerRatio < Tuning.hungerLevelStarving) ? red : green;
 
 				// Adjust hunger status labels (starving, ravenous, hungry, peckish, full)
