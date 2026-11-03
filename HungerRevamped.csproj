@@ -3,7 +3,7 @@
 
  <PropertyGroup>
         <!--This needs to be changed for the mod to compile.-->
-        <TheLongDarkPath>D:\SteamLibrary\steamapps\common\TheLongDark</TheLongDarkPath>
+        <TheLongDarkPath>G:\SteamLibrary\steamapps\common\TheLongDark</TheLongDarkPath>
         <Platforms>AnyCPU;x64</Platforms>
     </PropertyGroup>
 	
@@ -45,13 +45,13 @@
 	<ItemGroup>
 		<!--This package contains almost everything a person could possibly need to reference while modding.-->
 		 <Reference Include="Il2CppAK.Wwise.Unity.API.WwiseTypes">
-		   <HintPath>D:\SteamLibrary\steamapps\common\TheLongDark\MelonLoader\Il2CppAssemblies\Il2CppAK.Wwise.Unity.API.WwiseTypes.dll</HintPath>
+		   <HintPath>G:\SteamLibrary\steamapps\common\TheLongDark\MelonLoader\Il2CppAssemblies\Il2CppAK.Wwise.Unity.API.WwiseTypes.dll</HintPath>
 		 </Reference>
 		 <Reference Include="ModData">
-          <HintPath>D:\SteamLibrary\steamapps\common\TheLongDark\Mods\ModData.dll</HintPath>
+          <HintPath>G:\SteamLibrary\steamapps\common\TheLongDark\Mods\ModData.dll</HintPath>
         </Reference>
         <Reference Include="ModSettings">
-          <HintPath>D:\SteamLibrary\steamapps\common\TheLongDark\Mods\ModSettings.dll</HintPath>
+          <HintPath>G:\SteamLibrary\steamapps\common\TheLongDark\Mods\ModSettings.dll</HintPath>
         </Reference>
 		
         <Reference Include="Il2CppInterop.Common">
@@ -90,7 +90,7 @@
         <Reference Include="Il2CppTLD.IntBackedUnit" />
         <Reference Include="ModSettings" />
         <Reference Include="Unity.Addressables">
-          <HintPath>D:\SteamLibrary\steamapps\common\TheLongDark\MelonLoader\Il2CppAssemblies\Unity.Addressables.dll</HintPath>
+          <HintPath>G:\SteamLibrary\steamapps\common\TheLongDark\MelonLoader\Il2CppAssemblies\Unity.Addressables.dll</HintPath>
         </Reference>
         <Reference Include="Unity.Mathematics" />
         <Reference Include="Unity.TextMeshPro" />

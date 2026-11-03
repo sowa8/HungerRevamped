@@ -11,16 +11,10 @@ namespace HungerRevamped
 {
     internal static class VitaminCDebugPatch
     {
-        [HarmonyPatch(
-            typeof(PlayerManager),
-            nameof(PlayerManager.OnEatingComplete),
-            new Type[] { typeof(bool), typeof(bool), typeof(float) })]
+        [HarmonyPatch(typeof(PlayerManager),nameof(PlayerManager.OnEatingComplete),new Type[] { typeof(bool), typeof(bool), typeof(float) })]
         internal static class OnEatingCompletePatch
         {
-            private static void Postfix(
-                bool success,
-                bool playerCancel,
-                float progress)
+            private static void Postfix(bool success,bool playerCancel,float progress)
             {
                 if (!MenuSettings.settings.PrintVitaminC)
                     return;
@@ -45,9 +39,7 @@ namespace HungerRevamped
 
                 float vitaminC = scurvy.GetVitaminCNormalized();
 
-                MelonLogger.Msg(
-                    "[VitaminC] Current level: " +
-                    vitaminC.ToString("P1"));
+                MelonLogger.Msg("[VitaminC] Current level: " + vitaminC.ToString("P1"));
             }
         }
     }

@@ -16,7 +16,7 @@ namespace HungerRevamped {
 
 		internal const float storingCaloriesPerHour = 120f;
 		internal const float removingCaloriesPerHour = -200f;
-		internal const float starvingConditionChangePerHour = -5f;
+		//internal const float starvingConditionChangePerHour = -5f;
 
 		internal const float foodPoisoningDelayHoursMin = 4f;
 		internal const float foodPoisoningDelayHoursMax = 16f;
@@ -57,15 +57,31 @@ namespace HungerRevamped {
 			return Mathf.Max(maxCaloriesRemovedPerHour * calorieRemoveSpeed, -calorieBurnRate);
 		}
 
-		internal static float GetConditionChangePerHour(float hungerRatio, double storedCalories) {
+        /*internal static float GetConditionChangePerHour(float hungerRatio, double storedCalories) {
 			float starveRatio01 = Mathf.Clamp01((hungerLevelStarving - hungerRatio) / hungerLevelStarving);
 			float noStoredCaloriesMultiplier = (storedCalories < 1)   ? 2.5f :
 			                                   (storedCalories < 250) ? 2.0f :
 			                                                            1.0f;
 			return starvingConditionChangePerHour * starveRatio01 * noStoredCaloriesMultiplier;
-		}
+		}*/
+        internal static float GetConditionChangePerHour(float hungerRatio, double storedCalories)
+        {
+            if (hungerRatio >= hungerLevelStarving)
+                return 0f;
 
-		internal static float GetStoredCaloriesWarmthBonus(float storedCaloriesRatio) {
+            if (storedCalories < 1)
+                return -5f;
+            else if (storedCalories > 18_000)
+                return -0.5f;
+            else if (storedCalories > 14_000)
+                return -1.5f;
+            else if (storedCalories > 10_000)
+                return -2f;
+            else
+                return -2.5f;
+        }
+
+        internal static float GetStoredCaloriesWarmthBonus(float storedCaloriesRatio) {
 			return LerpFromArray(storedCaloriesWarmthBonus, storedCaloriesRatio);
 		}
 
