@@ -97,14 +97,24 @@ namespace HungerRevamped {
 				if (GameManager.m_IsPaused)
 					return false;
 
-				bool active = __instance.HasWellFed();
-				float carryBonus = HungerRevamped.Instance.GetCarryBonus();
+				float currentStoredCalories = HungerRevamped.Instance.GetStoredCalories();
+
+				// 1. KONTROLA BONUSU DO UDŹWIGU (Włącza się powyżej 12 000 kcal)
+				float carryBonus = 0f;
+				if (currentStoredCalories >= 12000f)
+				{
+					carryBonus = HungerRevamped.Instance.GetCarryBonus(); 
+				}
 				__instance.m_CarryCapacityBonus = ItemWeight.FromKilograms(carryBonus);
 
-				if (!active && carryBonus >= Tuning.wellFedCarryBonusStart)
+				// 2. KONTROLA IKONY STATUSU WELL FED (Pojawia się powyżej 3 000 kcal)
+				bool active = __instance.HasWellFed();
+
+				if (!active && currentStoredCalories >= 3000f)
 				{
 					__instance.WellFedStart(__instance.GetCauseLocalizationId(), true, false);
-				} else if (active && carryBonus < Tuning.wellFedCarryBonusEnd)
+				} 
+				else if (active && currentStoredCalories < 3000f)
 				{
 					__instance.WellFedEnd();
 				}
