@@ -1,0 +1,34 @@
+name: Build Mod
+
+on:
+  push:
+    branches: [ master ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v2
+
+    - name: Setup NuGet
+      uses: NuGet/setup-nuget@v2
+
+    - name: Restore NuGet Packages
+      run: nuget restore HungerRevamped.sln
+      continue-on-error: true
+
+    - name: Build Solution
+      run: msbuild HungerRevamped.sln /p:Configuration=Release
+      continue-on-error: true
+
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: HungerRevamped-Built
+        path: "**/bin/Release/*.dll"
